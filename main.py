@@ -7,22 +7,39 @@ Created on Mon Mar  8 18:19:51 2021
 
 import sys, pygame
 from sys import exit
+from paddle import Paddle
 
 
 def main():
     pygame.init()
 
     #Definiamo colori e dimensioni
-    size = width, height = 1024, 800
+    #size = width, height = 1024, 800
+    size = width, height = (700,500)
     speed = [1, 1]
     black = (0,0,0)
     white = (255,255,255)
 
-   #Definiamo la finestra
+    #Definiamo la finestra
     screen = pygame.display.set_mode(size)
     pygame.display.set_caption("Pong")
-    ball = pygame.image.load("intro_ball.gif")
-    ballrect = ball.get_rect()
+    
+    
+    paddleA = Paddle(white, 10, 100)
+    paddleA.rect.x = 20
+    paddleA.rect.y = 200
+    
+    paddleB = Paddle(white, 10, 100)
+    paddleB.rect.x = 670
+    paddleB.rect.y = 200
+    #ball = pygame.image.load("intro_ball.gif")
+    #ballrect = ball.get_rect()
+    
+    #Creazione di una lista che memorizza tutti gli sprite che creeremo nel gioco (ossia 2)
+    all_sprites_list = pygame.sprite.Group()
+    all_sprites_list.add(paddleA)
+    all_sprites_list.add(paddleB)
+    
     
     #Il loop va avanti finchè l'utente non esce dal gioco 
     carryOn = True
@@ -35,20 +52,23 @@ def main():
                 pygame.quit()
                 exit()
 
+        all_sprites_list.update()
             # if event.type == pygame.KEYDOWN:
             #     if event.key == pygame.QUIT:
             #         pygame.display.quit()
             #         quit_game()
                 # poi qua ci si mette il codice per gestire gli altri possibili keypress
 
-        ballrect = ballrect.move(speed)
-        if ballrect.left < 0 or ballrect.right > width:
-            speed[0] = -speed[0]
-        if ballrect.top < 0 or ballrect.bottom > height:
-            speed[1] = -speed[1]
+        # ballrect = ballrect.move(speed)
+        # if ballrect.left < 0 or ballrect.right > width:
+        #     speed[0] = -speed[0]
+        # if ballrect.top < 0 or ballrect.bottom > height:
+        #     speed[1] = -speed[1]
 
         screen.fill(black)
-        screen.blit(ball, ballrect)
+        pygame.draw.line(screen, white, [349, 0], [349, 500], 5)
+        all_sprites_list.draw(screen)
+        #screen.blit(ball, ballrect)
         pygame.display.flip()
        
         #Limite a 90 frame per secondo
