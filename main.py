@@ -6,31 +6,39 @@ Created on Mon Mar  8 18:19:51 2021
 """
 
 import sys, pygame
-
-
-def quit_game():
-    sys.exit(0)
+from sys import exit
 
 
 def main():
     pygame.init()
 
+    #Definiamo colori e dimensioni
     size = width, height = 1024, 800
     speed = [1, 1]
-    black = 0, 0, 0
+    black = (0,0,0)
+    white = (255,255,255)
 
+   #Definiamo la finestra
     screen = pygame.display.set_mode(size)
+    pygame.display.set_caption("Pong")
     ball = pygame.image.load("intro_ball.gif")
     ballrect = ball.get_rect()
+    
+    #Il loop va avanti finchè l'utente non esce dal gioco 
+    carryOn = True
+    clock = pygame.time.Clock() #verrà usato per controllare quanto velocemente si aggiorna lo screen
 
-    while 1:
+    while carryOn:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                quit_game()
+                carryOn = False
+                pygame.quit()
+                exit()
 
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    quit_game()
+            # if event.type == pygame.KEYDOWN:
+            #     if event.key == pygame.QUIT:
+            #         pygame.display.quit()
+            #         quit_game()
                 # poi qua ci si mette il codice per gestire gli altri possibili keypress
 
         ballrect = ballrect.move(speed)
@@ -42,7 +50,10 @@ def main():
         screen.fill(black)
         screen.blit(ball, ballrect)
         pygame.display.flip()
+       
+        #Limite a 90 frame per secondo
+        clock.tick(90)
 
-
+pygame.quit()
 if __name__ == '__main__':
     main()
