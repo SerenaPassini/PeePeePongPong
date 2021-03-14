@@ -19,7 +19,21 @@ class Paddle(pygame.sprite.Sprite):
         self.image.fill(black)
         self.image.set_colorkey(black)
        
-        
+        #Disegna il rettangolo
         pygame.draw.rect(self.image, color, [0,0, width, height])
+        #Fa fetch con le dimensioni dell'immagine
         self.rect = self.image.get_rect()
+        
+    #Per muovere su e giù i rettangoli
+    def moveUp(self, pixels):
+        self.rect.y -= pixels
+        #Check che non stia andando fuori dallo screen
+        if self.rect.y < 0:
+            self.rect.y = 0
+            
+    def moveDown(self, pixels):
+        self.rect.y += pixels
+        #Stesso check di prima
+        if self.rect.y > 400:
+            self.rect.y = 400
        

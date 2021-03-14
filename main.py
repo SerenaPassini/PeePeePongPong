@@ -46,18 +46,34 @@ def main():
     clock = pygame.time.Clock() #verrà usato per controllare quanto velocemente si aggiorna lo screen
 
     while carryOn:
+        
+        #Qui viene gestito il clic sulla "X" che chiude la finestra
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 carryOn = False
                 pygame.quit()
                 exit()
+                
+            #In questo modo si riesce a spostare il paddle A con le frecce (su e giù)    
+            # if event.type == pygame.KEYDOWN:
+            #     if event.key == pygame.K_UP:
+            #         paddleA.rect.y -= 3
+            #     if event.key == pygame.K_DOWN:
+            #         paddleA.rect.y += 3
+            
+            keys = pygame.key.get_pressed()
+            if keys[pygame.K_w]:
+                paddleB.moveUp(6)
+            if keys[pygame.K_s]:
+                paddleB.moveDown(6)
+            if keys[pygame.K_UP]:
+                paddleA.moveUp(6)
+            if keys[pygame.K_DOWN]:
+                paddleA.moveDown(6)
+           
+            
 
         all_sprites_list.update()
-            # if event.type == pygame.KEYDOWN:
-            #     if event.key == pygame.QUIT:
-            #         pygame.display.quit()
-            #         quit_game()
-                # poi qua ci si mette il codice per gestire gli altri possibili keypress
 
         # ballrect = ballrect.move(speed)
         # if ballrect.left < 0 or ballrect.right > width:
