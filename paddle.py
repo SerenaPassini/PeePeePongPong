@@ -20,26 +20,25 @@ class Paddle(pygame.sprite.Sprite):
     def __init__(self, color, width, height):
         super().__init__()
 
-        # Setta il colore del background e lo rende trasparente
+        # Crea l'immagine dello sprite con dimensioni width x height
         self.image = pygame.Surface([width, height])
-        self.image.fill(black)
-        self.mov_dir = 0
-
-        self.image.set_colorkey(black)
-        # Disegna il rettangolo
+        # Colora l'immagine disegnandovi dentro un rettangolo del colore "color"
         pygame.draw.rect(self.image, color, [0, 0, width, height])
-        # Fa fetch con le dimensioni dell'immagine
         self.rect = self.image.get_rect()
+
+        self.mov_dir = 0
 
     # metodo ereditato dalla classe Sprite, chiamato dall'omonimo update() del gruppo in cui
     # si trova lo sprite
     # non serve sapere cosa facciano gli argomenti
     def update(self, *args, **kwargs) -> None:
+        scrn_h = kwargs["scrn_size"].height
+
         self.rect.y += Paddle.SPEED * self.mov_dir
         # in questo modo la Y del paddle è sempre almeno 0
         self.rect.y = max(self.rect.y, 0)
-        # in questo modo la Y del paddle è sempre al massimo 400
-        self.rect.y = min(self.rect.y, 400)
+        # in questo modo la Y del paddle è sempre al massimo (altezza_schermo)-(altezza_paddle)
+        self.rect.y = min(self.rect.y, scrn_h - self.rect.height)
 
     def setMovementDir(self, dir):
         if dir == Paddle.MOVE_UP:

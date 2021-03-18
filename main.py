@@ -7,6 +7,8 @@ Created on Mon Mar  8 18:19:51 2021
 
 import sys, pygame
 from sys import exit
+
+from ball import Ball
 from paddle import Paddle
 
 
@@ -15,22 +17,23 @@ def main():
 
     # Definiamo colori e dimensioni
     # size = width, height = 1024, 800
-    size = width, height = (700, 500)
-    speed = [1, 1]
+    size = pygame.Rect(0, 0, 800, 600)
     black = (0, 0, 0)
     white = (255, 255, 255)
 
     # Definiamo la finestra
-    screen = pygame.display.set_mode(size)
+    screen = pygame.display.set_mode((size.width, size.height))
     pygame.display.set_caption("Pong")
 
     paddleA = Paddle(white, 10, 100)
     paddleA.rect.x = 20
-    paddleA.rect.y = 200
+    paddleA.rect.y = (size.height - 100) / 2
 
     paddleB = Paddle(white, 10, 100)
-    paddleB.rect.x = 670
-    paddleB.rect.y = 200
+    paddleB.rect.x = size.width - 10 - 20
+    paddleB.rect.y = (size.height - 100) / 2
+
+    ball = Ball(12)
     # ball = pygame.image.load("intro_ball.gif")
     # ballrect = ball.get_rect()
 
@@ -38,6 +41,7 @@ def main():
     all_sprites_list = pygame.sprite.Group()
     all_sprites_list.add(paddleA)
     all_sprites_list.add(paddleB)
+    all_sprites_list.add(ball)
 
     # Il loop va avanti finchè l'utente non esce dal gioco
     carryOn = True
@@ -45,8 +49,8 @@ def main():
 
     while carryOn:
 
-        # Qui viene gestito il clic sulla "X" che chiude la finestra
         for event in pygame.event.get():
+            # Qui viene gestito il clic sulla "X" che chiude la finestra
             if event.type == pygame.QUIT:
                 quit_game()
 
@@ -71,24 +75,19 @@ def main():
             # muovendo al momento, gli si dice di smettere di muoversi
             if event.type == pygame.KEYUP:
                 if (event.key == pygame.K_w and paddleA.mov_dir == Paddle.MOVE_UP) or \
-                   (event.key == pygame.K_s and paddleA.mov_dir == Paddle.MOVE_DOWN):
+                        (event.key == pygame.K_s and paddleA.mov_dir == Paddle.MOVE_DOWN):
                     paddleA.setMovementDir(0)
 
                 if (event.key == pygame.K_i and paddleB.mov_dir == Paddle.MOVE_UP) or \
-                   (event.key == pygame.K_k and paddleB.mov_dir == Paddle.MOVE_DOWN):
+                        (event.key == pygame.K_k and paddleB.mov_dir == Paddle.MOVE_DOWN):
                     paddleA.setMovementDir(0)
 
         # viene chiamato il metodo update() di ogni sprite nel gruppo
-        all_sprites_list.update()
-
-        # ballrect = ballrect.move(speed)
-        # if ballrect.left < 0 or ballrect.right > width:
-        #     speed[0] = -speed[0]
-        # if ballrect.top < 0 or ballrect.bottom > height:
-        #     speed[1] = -speed[1]
+        # I tre parametri vengono passati all'update() di ogni sprite nel gruppo, che può usarli come vuole
+        all_sprites_list.update(scrn_size=size, rectPA=paddleA.rect, rectPB=paddleB.rect)
 
         screen.fill(black)
-        pygame.draw.line(screen, white, [349, 0], [349, 500], 5)
+        pygame.draw.line(screen, white, [size.width/2, 0], [size.width/2, size.height], 5)
         all_sprites_list.draw(screen)
         # screen.blit(ball, ballrect)
         pygame.display.flip()
