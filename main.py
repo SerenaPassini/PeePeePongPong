@@ -33,9 +33,10 @@ def main():
     paddleB.rect.x = size.width - 10 - 20
     paddleB.rect.y = (size.height - 100) / 2
 
-    ball = Ball(12)
-    # ball = pygame.image.load("intro_ball.gif")
-    # ballrect = ball.get_rect()
+    ball = Ball(white, 15)
+    ball.rect.x = 345
+    ball.rect.y = 195
+    
 
     # Creazione di una lista che gestisce tutti gli sprite che creeremo nel gioco (i due paddle e la pallina)
     all_sprites_list = pygame.sprite.Group()

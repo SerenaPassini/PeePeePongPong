@@ -7,29 +7,30 @@ Created on Fri Mar 12 14:40:33 2021
 from math import sqrt
 
 import pygame
+from random import randint
 
 black = (0, 0, 0)
 
 
-# Rappresenta un paddle
+# Rappresenta una palla
 class Ball(pygame.sprite.Sprite):
-    INITAL_SPEED = [3, 2]
 
-    # r è il *raggio* della palla
-    def __init__(self, r):
+    def __init__(self, color, width):
         super().__init__()
-
-        self.radius = r
-        self.velocity = Ball.INITAL_SPEED
-        # Si carica l'immagine dello sprite
-        ball_img = pygame.image.load("intro_ball.gif")
-        # Viene scalata in modo da rientrare nelle dimensioni richieste
-        self.image = pygame.transform.scale(ball_img, (self.radius * 2, self.radius * 2))
-
+        
+       #Passi il colore della palla, la sua altezza e larghezza
+        self.image = pygame.Surface ([width, width])
+        self.image.fill(black)
+        self.image.set_colorkey(black)
+       
+        #Disegna la palla (un rettangolo)
+        pygame.draw.rect(self.image, color, [0,0, width, width])
+        
+        #Setta la velocità
+        self.velocity = [randint(4,8), randint (-8,8)]
         self.rect = self.image.get_rect()
 
-        print(self.rect)
-
+        
     def update(self, *args, **kwargs) -> None:
         scrn_size: pygame.Rect = kwargs["scrn_size"]
 
@@ -38,6 +39,7 @@ class Ball(pygame.sprite.Sprite):
             self.velocity[0] = -self.velocity[0]
         if self.rect.top < 0 or self.rect.bottom > scrn_size.height:
             self.velocity[1] = -self.velocity[1]
+            
 
     # Controlla se la palla collide con un rettangolo (ossia un paddle)
     # COPIATISSIMO DA INTERNET but it works
