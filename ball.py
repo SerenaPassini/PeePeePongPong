@@ -30,7 +30,14 @@ class Ball(pygame.sprite.Sprite):
         self.velocity = [randint(4,8), randint (-8,8)]
         self.rect = self.image.get_rect()
 
-        
+        # def update(self):
+        #     self.rect.x += self.velocity[0]
+        #     self.rect.y += self.velocity[1]
+            
+    def bounce(self):
+           self.velocity[0] = -self.velocity[0]
+           self.velocity[1] = randint(-8,8)   
+   
     def update(self, *args, **kwargs) -> None:
         scrn_size: pygame.Rect = kwargs["scrn_size"]
 

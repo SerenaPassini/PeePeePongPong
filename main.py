@@ -47,6 +47,9 @@ def main():
     # Il loop va avanti finchè l'utente non esce dal gioco
     carryOn = True
     clock = pygame.time.Clock()  # verrà usato per controllare quanto velocemente si aggiorna lo screen
+    
+    scoreA = 0
+    scoreB = 0
 
     while carryOn:
 
@@ -81,16 +84,26 @@ def main():
 
                 if (event.key == pygame.K_i and paddleB.mov_dir == Paddle.MOVE_UP) or \
                         (event.key == pygame.K_k and paddleB.mov_dir == Paddle.MOVE_DOWN):
-                    paddleA.setMovementDir(0)
+                    paddleB.setMovementDir(0)
 
         # viene chiamato il metodo update() di ogni sprite nel gruppo
         # I tre parametri vengono passati all'update() di ogni sprite nel gruppo, che può usarli come vuole
         all_sprites_list.update(scrn_size=size, rectPA=paddleA.rect, rectPB=paddleB.rect)
 
+        if pygame.sprite.collide_mask(ball, paddleA) or pygame.sprite.collide_mask(ball, paddleB):
+            ball.bounce()
+
         screen.fill(black)
         pygame.draw.line(screen, white, [size.width/2, 0], [size.width/2, size.height], 5)
         all_sprites_list.draw(screen)
-        # screen.blit(ball, ballrect)
+       
+        #Display scores:
+        font = pygame.font.Font(None, 74)
+        text = font.render(str(scoreA), 1, white)
+        screen.blit(text, (size.width/4, 0))
+        text = font.render(str(scoreB), 1, white)
+        screen.blit(text, (size.width*3/4,0))
+        
         pygame.display.flip()
 
         # Limite a 90 frame per secondo
